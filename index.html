@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pritam Kumar — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08060f;--bg2:#0e0b18;--bg3:#131020;
+  --em:#a855f7;--em2:#9333ea;--em3:rgba(168,85,247,0.15);
+  --silver:#c8c8d8;--silver2:#9090a8;--silver3:rgba(200,200,216,0.08);
+  --gold:#f5c842;--gold2:#e8a800;
+  --text:#ede8ff;--muted:#6b6585;--muted2:#3d3858;
+  --border:rgba(168,85,247,0.15);--glow:rgba(168,85,247,0.3);
+  --font-h:'Bebas Neue',sans-serif;
+  --font-b:'Outfit',sans-serif;
+  --font-m:'Space Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden;cursor:none}
+a,button{cursor:pointer!important;pointer-events:auto!important;}
+
+#cur{position:fixed;width:8px;height:8px;background:var(--em);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s}
+#cur-r{position:fixed;width:32px;height:32px;border:1px solid var(--em);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;opacity:.55}
+body.hovering #cur{width:18px;height:18px;background:var(--gold)}
+body.hovering #cur-r{width:52px;height:52px;border-color:var(--gold);opacity:.8}
+
+#page-cover{position:fixed;inset:0;z-index:9000;pointer-events:none;display:grid;grid-template-columns:repeat(5,1fr)}
+.cover-col{background:var(--bg2);transform:scaleY(0);transform-origin:top}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.2rem 3rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(8,6,15,0.85);backdrop-filter:blur(24px);
+  border-bottom:0.5px solid var(--border)}
+.nav-logo{font-family:var(--font-h);font-size:1.5rem;letter-spacing:.08em;color:var(--text);text-decoration:none}
+.nav-logo em{color:var(--em);font-style:normal}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.75rem;color:var(--muted);text-decoration:none;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--em);transition:width .3s}
+.nav-links a:hover{color:var(--em)}
+.nav-links a:hover::after{width:100%}
+.nav-btn{background:transparent;color:var(--em);border:1px solid var(--em);padding:.5rem 1.4rem;border-radius:0;font-family:var(--font-b);font-size:.78rem;font-weight:600;cursor:none;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,color .2s,transform .15s;text-decoration:none;display:inline-block}
+.nav-btn:hover{background:var(--em);color:var(--bg);transform:translateY(-1px)}
+
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:8rem 3rem 4rem;overflow:hidden}
+canvas#particles{position:absolute;inset:0;opacity:.45}
+.hero-line{position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none}
+.hero-line::before{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--em),transparent);animation:scanLine 4s ease infinite}
+@keyframes scanLine{0%{bottom:0;opacity:0}20%{opacity:.5}80%{opacity:.5}100%{bottom:100%;opacity:0}}
+.hero-content{position:relative;z-index:2;max-width:820px}
+.hero-index{font-family:var(--font-m);font-size:.72rem;color:var(--muted);letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.hero-index::before{content:'';display:block;width:40px;height:1px;background:var(--muted2)}
+.status-dot{display:inline-flex;align-items:center;gap:.4rem;color:var(--em);font-size:.7rem;letter-spacing:.1em;margin-left:1.5rem}
+.dot{width:5px;height:5px;background:var(--em);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-name{font-family:var(--font-h);font-size:clamp(5rem,12vw,10rem);line-height:.9;letter-spacing:.04em;color:var(--text);animation:fadeSlide .8s ease both}
+.hero-name .outline{color:transparent;-webkit-text-stroke:1px var(--em);opacity:.35}
+.hero-role{font-size:1.05rem;color:var(--muted);margin-top:1.5rem;line-height:1.7;max-width:500px;animation:fadeSlide .8s .15s ease both}
+.hero-role strong{color:var(--silver);font-weight:500}
+.hero-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2rem;animation:fadeSlide .8s .25s ease both}
+.chip{background:transparent;border:0.5px solid var(--muted2);padding:.3rem .8rem;font-size:.72rem;color:var(--muted);font-family:var(--font-m);transition:border-color .2s,color .2s,background .2s}
+.chip:hover{border-color:var(--em);color:var(--em);background:var(--em3)}
+.hero-btns{display:flex;gap:1rem;margin-top:2.5rem;animation:fadeSlide .8s .35s ease both}
+.btn-em{background:var(--em);color:#fff;border:none;padding:.85rem 2.2rem;font-family:var(--font-b);font-size:.88rem;font-weight:700;cursor:none;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;letter-spacing:.05em;text-transform:uppercase;border-radius:0;transition:background .2s,transform .15s,box-shadow .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
+.btn-em:hover{background:var(--gold);transform:translateY(-2px);box-shadow:0 10px 30px rgba(245,200,66,.2)}
+.btn-ol{background:transparent;color:var(--text);border:0.5px solid var(--muted2);padding:.85rem 2.2rem;font-family:var(--font-b);font-size:.88rem;font-weight:500;cursor:none;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:color .2s,border-color .2s,transform .15s}
+.btn-ol:hover{color:var(--em);border-color:var(--em);transform:translateY(-2px)}
+.hero-counter{position:absolute;right:3rem;bottom:4rem;font-family:var(--font-m);font-size:.68rem;color:var(--muted2);writing-mode:vertical-rl;letter-spacing:.15em;text-transform:uppercase}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+
+.marquee-wrap{overflow:hidden;border-top:.5px solid var(--border);border-bottom:.5px solid var(--border);padding:.75rem 0;background:var(--bg2)}
+.marquee-track{display:flex;gap:3rem;animation:marquee 18s linear infinite;white-space:nowrap;width:max-content}
+.marquee-track span{font-family:var(--font-m);font-size:.7rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.marquee-track span.em{color:var(--em)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+section{padding:6rem 3rem;position:relative;z-index:1}
+.sec-label{font-size:.68rem;color:var(--em);letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-m);margin-bottom:.75rem;display:flex;align-items:center;gap:.75rem}
+.sec-label::before{content:'[';color:var(--muted2)}
+.sec-label::after{content:']';color:var(--muted2)}
+.sec-title{font-family:var(--font-h);font-size:clamp(2.5rem,5vw,4.5rem);letter-spacing:.06em;line-height:1;margin-bottom:1rem}
+.divider{width:100%;height:.5px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0}
+
+#skills{background:var(--bg2)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border);border:.5px solid var(--border);margin-top:3rem}
+.sk-card{background:var(--bg2);padding:2rem;position:relative;overflow:hidden;transition:background .3s}
+.sk-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--em);transition:height .4s ease}
+.sk-card:hover{background:var(--bg3)}
+.sk-card:hover::before{height:100%}
+.sk-num{font-family:var(--font-h);font-size:3rem;color:var(--muted2);letter-spacing:.05em;line-height:1;margin-bottom:1rem}
+.sk-name{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:.85rem;letter-spacing:.05em;text-transform:uppercase}
+.sk-list{list-style:none;display:flex;flex-direction:column;gap:.35rem}
+.sk-list li{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.6rem}
+.sk-list li::before{content:'→';color:var(--em);font-size:.7rem}
+
+.proj-card{background:var(--bg2);border:.5px solid var(--border);margin-top:3rem;position:relative;overflow:hidden;transition:border-color .3s}
+.proj-card:hover{border-color:rgba(168,85,247,.4)}
+.proj-top{padding:2.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start}
+.proj-tag{font-family:var(--font-m);font-size:.68rem;color:var(--em);background:var(--em3);border:.5px solid rgba(168,85,247,.25);padding:.3rem .8rem;letter-spacing:.1em;text-transform:uppercase;align-self:flex-start}
+.proj-big{font-family:var(--font-h);font-size:clamp(2.5rem,5vw,5rem);letter-spacing:.05em;line-height:.9;margin:1rem 0}
+.proj-big em{color:var(--em);font-style:normal}
+.proj-desc{color:var(--muted);font-size:.92rem;line-height:1.75;max-width:580px}
+.proj-role{font-family:var(--font-m);font-size:.72rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--border);border-top:.5px solid var(--border)}
+.feat{background:var(--bg2);padding:1.5rem;transition:background .25s}
+.feat:hover{background:var(--bg3)}
+.feat-icon{width:32px;height:32px;border:.5px solid var(--muted2);display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-bottom:.75rem;transition:border-color .2s}
+.feat:hover .feat-icon{border-color:var(--em)}
+.feat-name{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.3rem}
+.feat-desc{font-size:.75rem;color:var(--muted);line-height:1.5}
+.stack-row{display:flex;flex-wrap:wrap;gap:.5rem;padding:1.5rem 2.5rem;border-top:.5px solid var(--border);background:var(--bg3)}
+.stk{font-family:var(--font-m);font-size:.68rem;color:var(--muted);border:.5px solid var(--muted2);padding:.25rem .65rem;transition:color .2s,border-color .2s}
+.stk:hover{color:var(--em);border-color:var(--em)}
+
+/* STRENGTH & WEAKNESS */
+#sw{background:var(--bg)}
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem}
+.sw-box{border:.5px solid var(--border);padding:2rem;position:relative;overflow:hidden;transition:border-color .3s}
+.sw-box:hover{border-color:rgba(168,85,247,.4)}
+.sw-box-label{font-family:var(--font-m);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:.6rem}
+.sw-box-label.strength{color:#a3e635}
+.sw-box-label.weakness{color:var(--gold)}
+.sw-box-label::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:currentColor}
+.sw-title{font-family:var(--font-h);font-size:2rem;letter-spacing:.06em;margin-bottom:1.5rem;color:var(--text)}
+.sw-item{display:flex;align-items:flex-start;gap:.85rem;margin-bottom:1.1rem}
+.sw-icon{width:30px;height:30px;border:.5px solid var(--muted2);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;margin-top:.1rem}
+.sw-item-text{font-size:.85rem;color:var(--muted);line-height:1.6}
+.sw-item-text strong{color:var(--text);font-weight:600;display:block;margin-bottom:.15rem;font-size:.88rem}
+
+/* HOBBIES */
+#hobbies{background:var(--bg2)}
+.hob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--border);border:.5px solid var(--border);margin-top:3rem}
+.hob-item{background:var(--bg2);padding:1.75rem 1.5rem;text-align:center;transition:background .25s;position:relative;overflow:hidden}
+.hob-item::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--em);transition:width .4s ease}
+.hob-item:hover{background:var(--bg3)}
+.hob-item:hover::after{width:80%}
+.hob-emoji{font-size:1.8rem;margin-bottom:.75rem;display:block}
+.hob-name{font-size:.82rem;font-weight:600;color:var(--text);letter-spacing:.04em}
+.hob-desc{font-size:.72rem;color:var(--muted);margin-top:.3rem;line-height:1.5}
+
+#about{background:var(--bg2)}
+.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:3rem;align-items:start}
+.about-desc{font-size:.95rem;color:var(--muted);line-height:1.8;margin-bottom:1.2rem}
+.about-quote{border-left:2px solid var(--em);padding:1rem 1.5rem;margin:2rem 0;font-style:italic;color:var(--silver2);font-size:.92rem;line-height:1.7;background:var(--silver3)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:.5px solid var(--border);margin-top:2rem}
+.stat{background:var(--bg2);padding:1.5rem 1rem;text-align:center;transition:background .25s}
+.stat:hover{background:var(--bg3)}
+.stat-n{font-family:var(--font-h);font-size:2.5rem;color:var(--em);letter-spacing:.05em}
+.stat-l{font-size:.68rem;color:var(--muted);margin-top:.25rem;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-m)}
+.edu-stack{display:flex;flex-direction:column;gap:0}
+.edu-item{background:var(--bg3);border:.5px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:1px;position:relative;transition:border-color .25s,background .25s;overflow:hidden}
+.edu-item::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--em);transition:width .4s ease}
+.edu-item:hover{border-color:rgba(168,85,247,.35);background:var(--bg2)}
+.edu-item:hover::after{width:100%}
+.edu-yr{font-family:var(--font-m);font-size:.65rem;color:var(--em);letter-spacing:.12em;float:right;text-transform:uppercase}
+.edu-deg{font-size:.88rem;font-weight:600;color:var(--text)}
+.edu-sch{font-size:.78rem;color:var(--muted);margin-top:.25rem}
+.edu-sub{font-size:.72rem;color:var(--muted2);margin-top:.4rem}
+
+#contact{text-align:center;overflow:hidden}
+.contact-wrap{max-width:640px;margin:0 auto}
+.contact-big{font-family:var(--font-h);font-size:clamp(3rem,8vw,7rem);letter-spacing:.04em;line-height:.95;margin:1.5rem 0}
+.contact-big .hollow{color:transparent;-webkit-text-stroke:1.5px var(--em)}
+.contact-desc{color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:2.5rem}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--border);border:.5px solid var(--border);margin-top:2rem;text-align:left}
+.c-item{background:var(--bg2);padding:1.25rem 1.5rem;text-decoration:none;color:var(--text);transition:background .25s;display:flex;align-items:center;gap:.75rem}
+.c-item:hover{background:var(--bg3);color:var(--em)}
+.c-icon{font-size:1.1rem;flex-shrink:0}
+.c-label{font-size:.68rem;color:var(--muted);font-family:var(--font-m);letter-spacing:.08em;margin-bottom:.2rem;text-transform:uppercase}
+.c-val{font-size:.82rem;font-weight:500}
+
+footer{padding:2rem 3rem;border-top:.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ft-brand{font-family:var(--font-h);font-size:1.3rem;letter-spacing:.08em}
+.ft-brand em{color:var(--em);font-style:normal}
+.ft-copy{font-size:.72rem;color:var(--muted2);font-family:var(--font-m);letter-spacing:.1em}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s ease,transform .8s ease}
+.reveal-left.in{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal-right.in{opacity:1;transform:translateX(0)}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  #hero,section{padding:5rem 1.5rem 3rem}
+  .about-wrap,.sw-grid{grid-template-columns:1fr;gap:2rem}
+  .proj-top{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:.5rem;text-align:center}
+  .hero-counter{display:none}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-r"></div>
+<div id="page-cover">
+  <div class="cover-col"></div><div class="cover-col"></div>
+  <div class="cover-col"></div><div class="cover-col"></div>
+  <div class="cover-col"></div>
+</div>
+
+<nav>
+  <a href="#hero" class="nav-logo">PK<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#project">Project</a></li>
+    <li><a href="#sw">Strengths</a></li>
+    <li><a href="#hobbies">Hobbies</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:pritamrajput9631@email.com?subject=Hiring%20Inquiry%20-%20Pritam%20Kumar&body=Hi%20Pritam%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20potential%20opportunity%20with%20you.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0ARegards%2C" class="nav-btn">Hire Me</a>
+</nav>
+
+<section id="hero">
+  <canvas id="particles"></canvas>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <div class="hero-index">
+      <span>01 / INTRO</span>
+      <span class="status-dot"><span class="dot"></span> Available for work</span>
+    </div>
+    <div class="hero-name">
+      <div>PRITAM</div>
+      <div class="outline">KUMAR</div>
+    </div>
+    <p class="hero-role">Computer Operator · <strong>AI Automation Builder</strong> · Product Founder<br>Turning workflows into intelligent systems that save time and scale effortlessly.</p>
+    <div class="hero-chips">
+      <span class="chip">AI Agents</span>
+      <span class="chip">n8n · Zapier · Make</span>
+      <span class="chip">React Native</span>
+      <span class="chip">Python</span>
+      <span class="chip">MS Office Suite</span>
+      <span class="chip">Firebase</span>
+    </div>
+    <div class="hero-btns">
+      <a href="#project" class="btn-em">View Project →</a>
+      <a href="#contact" class="btn-ol">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-counter">Patna · Bihar · India</div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="em">✦</span><span>AI Automation</span>
+    <span class="em">✦</span><span>Computer Operations</span>
+    <span class="em">✦</span><span>React Native</span>
+    <span class="em">✦</span><span>Python Scripting</span>
+    <span class="em">✦</span><span>Hyperlocal Apps</span>
+    <span class="em">✦</span><span>n8n Workflows</span>
+    <span class="em">✦</span><span>Firebase</span>
+    <span class="em">✦</span><span>Problem Solving</span>
+    <span class="em">✦</span><span>AI Automation</span>
+    <span class="em">✦</span><span>Computer Operations</span>
+    <span class="em">✦</span><span>React Native</span>
+    <span class="em">✦</span><span>Python Scripting</span>
+    <span class="em">✦</span><span>Hyperlocal Apps</span>
+    <span class="em">✦</span><span>n8n Workflows</span>
+    <span class="em">✦</span><span>Firebase</span>
+    <span class="em">✦</span><span>Problem Solving</span>
+  </div>
+</div>
+
+<section id="skills">
+  <div class="sec-label">02 · Capabilities</div>
+  <h2 class="sec-title reveal">SKILLS &amp; TOOLS</h2>
+  <div class="skills-grid reveal">
+    <div class="sk-card">
+      <div class="sk-num">01</div>
+      <div class="sk-name">AI & Automation</div>
+      <ul class="sk-list">
+        <li>ChatGPT, Claude AI, Gemini</li>
+        <li>n8n · Make.com · Zapier</li>
+        <li>Notion AI workflows</li>
+        <li>Chatbot & notification systems</li>
+        <li>Document summarisation & reports</li>
+      </ul>
+    </div>
+    <div class="sk-card">
+      <div class="sk-num">02</div>
+      <div class="sk-name">Computer Ops</div>
+      <ul class="sk-list">
+        <li>MS Word, Excel, PowerPoint</li>
+        <li>Google Workspace (Docs/Sheets)</li>
+        <li>Data entry — fast, high accuracy</li>
+        <li>Windows 10 / 11</li>
+        <li>Email & online communication</li>
+      </ul>
+    </div>
+    <div class="sk-card">
+      <div class="sk-num">03</div>
+      <div class="sk-name">Development</div>
+      <ul class="sk-list">
+        <li>React Native (mobile apps)</li>
+        <li>Firebase / backend services</li>
+        <li>Python — automation scripts</li>
+        <li>Basic HTML</li>
+        <li>Google Maps & Location APIs</li>
+      </ul>
+    </div>
+    <div class="sk-card">
+      <div class="sk-num">04</div>
+      <div class="sk-name">Core Skills</div>
+      <ul class="sk-list">
+        <li>Quick learner, adapts fast</li>
+        <li>Entrepreneurial ownership mindset</li>
+        <li>Analytical problem solver</li>
+        <li>Self-motivated, minimal supervision</li>
+        <li>Hindi & English communication</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="project">
+  <div class="sec-label">03 · Featured Work</div>
+  <h2 class="sec-title reveal">MY PROJECT</h2>
+  <div class="proj-card reveal">
+    <div class="proj-top">
+      <div>
+        <div class="proj-role">Founder & Product Builder</div>
+        <div class="proj-big">NEARBY<em>.</em></div>
+        <p class="proj-desc">A hyperlocal discovery & marketplace app connecting users with nearby businesses, properties, and second-hand goods — real-time GPS, zero middlemen, fully secure.</p>
+      </div>
+      <span class="proj-tag">● Live Project</span>
+    </div>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-icon">📍</div><div class="feat-name">Location Discovery</div><div class="feat-desc">Restaurants, hospitals, ATMs, petrol pumps via real-time GPS</div></div>
+      <div class="feat"><div class="feat-icon">🏪</div><div class="feat-name">Business Listings</div><div class="feat-desc">Shops, hotels, service centers promoted to nearby customers</div></div>
+      <div class="feat"><div class="feat-icon">🏠</div><div class="feat-name">Property Market</div><div class="feat-desc">Direct buyer-seller connections — no brokers or middlemen</div></div>
+      <div class="feat"><div class="feat-icon">🛒</div><div class="feat-name">Buy & Sell</div><div class="feat-desc">Second-hand phones, bikes, cars, furniture, electronics</div></div>
+      <div class="feat"><div class="feat-icon">💬</div><div class="feat-name">Secure Chat</div><div class="feat-desc">In-app messaging without sharing personal phone numbers</div></div>
+      <div class="feat"><div class="feat-icon">🔐</div><div class="feat-name">Auth System</div><div class="feat-desc">Google Sign-In & OTP-based secure account access</div></div>
+    </div>
+    <div class="stack-row">
+      <span class="stk">React Native</span><span class="stk">Firebase</span>
+      <span class="stk">Google Maps API</span><span class="stk">Location APIs</span>
+      <span class="stk">Auth Systems</span><span class="stk">UI/UX Design</span>
+      <span class="stk">AI-Assisted Dev</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STRENGTH & WEAKNESS -->
+<section id="sw">
+  <div class="sec-label">04 · Self Awareness</div>
+  <h2 class="sec-title reveal">STRENGTHS &amp; WEAKNESS</h2>
+  <div class="sw-grid">
+    <div class="sw-box reveal-left">
+      <div class="sw-box-label strength">Strengths</div>
+      <div class="sw-title">What I Do Well</div>
+      <div class="sw-item">
+        <div class="sw-icon">⚡</div>
+        <div class="sw-item-text"><strong>Fast Learner</strong>I pick up new tools, platforms, and technologies quickly without needing much hand-holding.</div>
+      </div>
+      <div class="sw-item">
+        <div class="sw-icon">🧠</div>
+        <div class="sw-item-text"><strong>Problem-Solving Mindset</strong>I break complex problems into smaller pieces and find practical, working solutions.</div>
+      </div>
+      <div class="sw-item">
+        <div class="sw-icon">🤖</div>
+        <div class="sw-item-text"><strong>AI & Automation</strong>I can identify repetitive tasks and automate them using AI tools, saving hours of manual work.</div>
+      </div>
+      <div class="sw-item">
+        <div class="sw-icon">🚀</div>
+        <div class="sw-item-text"><strong>Self-Starter & Builder</strong>I don't wait for permission — I build things, test ideas, and ship products independently.</div>
+      </div>
+      <div class="sw-item">
+        <div class="sw-icon">🎯</div>
+        <div class="sw-item-text"><strong>Ownership Mindset</strong>I treat every task as my own — fully accountable, fully committed to results.</div>
+      </div>
+    </div>
+    <div class="sw-box reveal-right">
+      <div class="sw-box-label weakness">Weakness</div>
+      <div class="sw-title">What I'm Working On</div>
+      <div class="sw-item">
+        <div class="sw-icon">🔄</div>
+        <div class="sw-item-text"><strong>Trying Too Many Things at Once</strong>I get excited trying different tools, ideas, and approaches at the same time to make work more productive — which sometimes leads to things taking longer or not finishing as planned.</div>
+      </div>
+      <div class="sw-item">
+        <div class="sw-icon">⏳</div>
+        <div class="sw-item-text"><strong>Over-Experimenting</strong>I often explore multiple solutions before settling on one. This helps me learn a lot, but can slow down delivery when a simpler path would have worked.</div>
+      </div>
+      <div class="sw-item">
+        <div class="sw-icon">📋</div>
+        <div class="sw-item-text"><strong>Perfectionism in Process</strong>Because I keep testing better ways to do things, I sometimes miss deadlines trying to optimize instead of just executing.</div>
+      </div>
+      <div style="margin-top:1.5rem;padding:.85rem 1.1rem;background:var(--em3);border:.5px solid var(--border)">
+        <div style="font-size:.72rem;color:var(--em);font-family:var(--font-m);letter-spacing:.1em;margin-bottom:.4rem">LEARNING FROM IT</div>
+        <div style="font-size:.8rem;color:var(--muted);line-height:1.6">I'm actively working on time-boxing experiments and committing to one approach before exploring alternatives — turning this curiosity into a strength.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOBBIES -->
+<section id="hobbies">
+  <div class="sec-label">05 · Beyond Work</div>
+  <h2 class="sec-title reveal">HOBBIES &amp; INTERESTS</h2>
+  <div class="hob-grid reveal">
+    <div class="hob-item">
+      <span class="hob-emoji">🤖</span>
+      <div class="hob-name">AI Exploration</div>
+      <div class="hob-desc">Testing new AI tools & building automation workflows just for fun</div>
+    </div>
+    <div class="hob-item">
+      <span class="hob-emoji">📱</span>
+      <div class="hob-name">App Building</div>
+      <div class="hob-desc">Turning ideas into real mobile products using React Native</div>
+    </div>
+    <div class="hob-item">
+      <span class="hob-emoji">📚</span>
+      <div class="hob-name">Self Learning</div>
+      <div class="hob-desc">Reading about tech, startups, and business strategies online</div>
+    </div>
+    <div class="hob-item">
+      <span class="hob-emoji">🎮</span>
+      <div class="hob-name">Gaming</div>
+      <div class="hob-desc">Casual gaming to unwind and sharpen quick decision-making</div>
+    </div>
+    <div class="hob-item">
+      <span class="hob-emoji">🌐</span>
+      <div class="hob-name">Web Browsing</div>
+      <div class="hob-desc">Exploring new products, tools and startup ideas on the internet</div>
+    </div>
+    <div class="hob-item">
+      <span class="hob-emoji">💡</span>
+      <div class="hob-name">Idea Building</div>
+      <div class="hob-desc">Brainstorming product ideas & sketching out solutions to real problems</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="about">
+  <div class="sec-label">06 · Background</div>
+  <h2 class="sec-title reveal">ABOUT ME</h2>
+  <div class="about-wrap">
+    <div class="reveal-left">
+      <p class="about-desc">I'm Pritam Kumar from Patna, Bihar — a B.Com student with a deep passion for AI tools, automation, and building real products. I founded <span style="color:var(--em);font-weight:600">Nearby</span>, a hyperlocal marketplace app, entirely through self-learning and modern tooling.</p>
+      <p class="about-desc">I believe the future belongs to people who can combine AI with action — building workflows, automating the repetitive, and creating something tangible.</p>
+      <div class="about-quote">"I don't just use technology — I build workflows and products with it to solve real problems."</div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-n">6+</div><div class="stat-l">AI Platforms</div></div>
+        <div class="stat"><div class="stat-n">3+</div><div class="stat-l">Auto Tools</div></div>
+        <div class="stat"><div class="stat-n">1</div><div class="stat-l">Live App</div></div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <div class="sec-label" style="margin-bottom:1.5rem">Education</div>
+      <div class="edu-stack">
+        <div class="edu-item">
+          <span class="edu-yr">Pursuing</span>
+          <div class="edu-deg">Bachelor of Commerce (B.Com)</div>
+          <div class="edu-sch">Shri Krishna University, MP — 4th Semester</div>
+          <div class="edu-sub">Financial Accounting · Business Economics · Computer Applications</div>
+        </div>
+        <div class="edu-item">
+          <span class="edu-yr">Class XII</span>
+          <div class="edu-deg">Science Stream</div>
+          <div class="edu-sch">Bihar School Examination Board (BSEB)</div>
+          <div class="edu-sub">Physics · Chemistry · Mathematics · English · Hindi</div>
+        </div>
+        <div class="edu-item">
+          <span class="edu-yr">Class X</span>
+          <div class="edu-deg">Secondary Education</div>
+          <div class="edu-sch">Bihar School Examination Board (BSEB)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="sec-label" style="justify-content:center">07 · Connect</div>
+    <div class="contact-big reveal">
+      <div>LET'S</div>
+      <div class="hollow">BUILD</div>
+      <div>TOGETHER</div>
+    </div>
+    <p class="contact-desc reveal">Whether you need a Computer Operator, an AI workflow, or a product idea explored — I'm ready. Let's create something great.</p>
+    <a href="mailto:pritamrajput9631@email.com" class="btn-em" style="margin:0 auto;display:inline-flex">Send an Email →</a>
+    <div class="contact-grid reveal" style="margin-top:2rem">
+      <a href="tel:+919631885037" class="c-item">
+        <span class="c-icon">📞</span>
+        <div><div class="c-label">Phone</div><div class="c-val">+91 96318 85037</div></div>
+      </a>
+      <a href="mailto:pritamrajput9631@email.com" class="c-item">
+        <span class="c-icon">✉️</span>
+        <div><div class="c-label">Email</div><div class="c-val">pritamrajput9631@email.com</div></div>
+      </a>
+      <a href="https://www.instagram.com/the_pritamrajput34" target="_blank" rel="noopener" class="c-item">
+        <span class="c-icon">📸</span>
+        <div><div class="c-label">Instagram</div><div class="c-val">@the_pritamrajput34</div></div>
+      </a>
+      <div class="c-item">
+        <span class="c-icon">📍</span>
+        <div><div class="c-label">Location</div><div class="c-val">Patna, Bihar</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-brand">PK<em>.</em></div>
+  <div class="ft-copy">© 2025 Pritam Kumar — All rights reserved</div>
+</footer>
+
+<script>
+(function(){
+  const cols=document.querySelectorAll('.cover-col');
+  let i=0;
+  function open(){if(i<cols.length){cols[i].style.transition='transform .5s cubic-bezier(.77,0,.18,1)';cols[i].style.transformOrigin='top';cols[i].style.transform='scaleY(1)';i++;setTimeout(open,60);}else{setTimeout(()=>{let j=0;function close(){if(j<cols.length){cols[j].style.transformOrigin='bottom';cols[j].style.transform='scaleY(0)';j++;setTimeout(close,60);}}close();},300);}}
+  open();
+})();
+
+(function(){
+  const c=document.getElementById('particles'),ctx=c.getContext('2d');
+  let W,H,pts=[];
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<80;i++)pts.push({x:Math.random()*2000,y:Math.random()*1000,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(168,85,247,.55)';ctx.fill();});
+    pts.forEach((a,i)=>{for(let j=i+1;j<pts.length;j++){const b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(168,85,247,${.12*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();}}});
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+(function(){
+  const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+  function tick(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick)}
+  tick();
+  document.querySelectorAll('a,button,.chip,.stk,.feat,.sk-card,.stat,.hob-item,.sw-box').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+  });
+})();
+
+(function(){
+  const all=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.1});
+  all.forEach(el=>obs.observe(el));
+})();
+
+(function(){
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#&✦';
+  function scramble(el){
+    const orig=el.dataset.text||el.textContent;let iter=0,interval;
+    interval=setInterval(()=>{
+      el.textContent=orig.split('').map((c,i)=>{if(c===' '||c==='&')return c;if(i<iter)return orig[i];return chars[Math.floor(Math.random()*chars.length)];}).join('');
+      if(iter>=orig.length)clearInterval(interval);iter+=1.5;
+    },40);
+  }
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){scramble(e.target);obs.unobserve(e.target);}});},{threshold:.5});
+  document.querySelectorAll('.sec-title').forEach(el=>{if(!el.dataset.text)el.dataset.text=el.textContent;obs.observe(el);});
+})();
+
+(function(){
+  document.querySelectorAll('a[href^="#"]').forEach(link=>{
+    link.addEventListener('click',function(e){
+      const target=document.querySelector(this.getAttribute('href'));
+      if(target){e.preventDefault();const top=target.getBoundingClientRect().top+window.scrollY-70;window.scrollTo({top,behavior:'smooth'});}
+    });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('.btn-em,.btn-ol,.nav-btn').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.2}px,${(e.clientY-r.top-r.height/2)*.35}px)`;});
+    btn.addEventListener('mouseleave',()=>{btn.style.transform='';});
+  });
+})();
+
+(function(){
+  document.querySelectorAll('.stat-n').forEach(el=>{
+    const val=parseFloat(el.textContent),suffix=el.textContent.replace(/[\d.]/g,'');
+    const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){let cur=0;const step=val/40;const t=setInterval(()=>{cur+=step;if(cur>=val){cur=val;clearInterval(t);}el.textContent=Math.floor(cur)+suffix;},30);obs.unobserve(el);}});},{threshold:.5});
+    obs.observe(el);
+  });
+})();
+</script>
+</body>
+</html>
